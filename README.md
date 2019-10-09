@@ -32,10 +32,33 @@
 ## redis-database-service : 
 
 ### SUBSCRIBER sensor/mesure
+```json
+{
+  "sensorId" : int,
+  "airportId" : string (IATA), 
+  "mesureType" : string,
+  "mesureValue" : float,
+  "timestamp": unix timestamp (seconds)
+}
+```
+
+### data storage 
+
+sensor:<id>:mesure:<timestamp> <json>
+
 
 ## file-database-service : 
 
 ### SUBSCRIBER sensor/mesure
+```json
+{
+  "sensorId" : int,
+  "airportId" : string (IATA), 
+  "mesureType" : string,
+  "mesureValue" : float,
+  "timestamp": unix timestamp (seconds)
+}
+```
 
 
 
