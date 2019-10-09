@@ -19,7 +19,7 @@
 
 ### PUBLISH on topic sensor/mesure
 
-```json
+```
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
@@ -32,7 +32,7 @@
 ## redis-database-service 
 
 ### SUBSCRIBE on topic sensor/mesure
-```json
+```
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
@@ -44,7 +44,7 @@
 
 ### data storage 
 
-```sensor:<id>:mesure:<timestamp> <json>```
+```sensor:<sensorId>:mesure:<timestamp> <json>```
 
 
 ## file-database-service 
