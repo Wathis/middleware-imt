@@ -17,7 +17,7 @@
 ]
 ```
 
-### PUBLISH sensor/mesure
+### PUBLISH on topic sensor/mesure
 
 ```json
 {
@@ -31,7 +31,7 @@
 
 ## redis-database-service 
 
-### SUBSCRIBER sensor/mesure
+### SUBSCRIBE on topic sensor/mesure
 ```json
 {
   "sensorId" : int,
@@ -49,7 +49,7 @@ sensor:<id>:mesure:<timestamp> <json>
 
 ## file-database-service 
 
-### SUBSCRIBER sensor/mesure
+### SUBSCRIBE on topic sensor/mesure
 ```json
 {
   "sensorId" : int,
