@@ -1,8 +1,8 @@
 # middleware-imt
 
-## sensors-service : 
+## sensors-service
 
-### config file : 
+### config file 
 
 ```json
 [
@@ -17,7 +17,7 @@
 ]
 ```
 
-### PUBLISH sensor/mesure :
+### PUBLISH sensor/mesure
 
 ```json
 {
@@ -29,7 +29,7 @@
 }
 ```
 
-## redis-database-service : 
+## redis-database-service 
 
 ### SUBSCRIBER sensor/mesure
 ```json
@@ -47,7 +47,7 @@
 sensor:<id>:mesure:<timestamp> <json>
 
 
-## file-database-service : 
+## file-database-service 
 
 ### SUBSCRIBER sensor/mesure
 ```json
