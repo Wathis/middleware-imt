@@ -4,7 +4,7 @@
 
 ### config file 
 
-```json
+```
 [
   {
     "brokerUrl" : string,
