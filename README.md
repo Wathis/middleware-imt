@@ -4,7 +4,7 @@
 
 ### config file : 
 
-``
+```json
 [
   {
     "brokerUrl" : string,
@@ -15,11 +15,11 @@
   },
   ...
 ]
-``
+```
 
 ### PUBLISH sensor/mesure :
 
-`
+```json
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
@@ -27,7 +27,7 @@
   "mesureValue" : float,
   "timestamp": unix timestamp (seconds)
 }
-`
+```
 
 ## redis-database-service : 
 
