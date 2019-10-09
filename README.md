@@ -44,7 +44,7 @@
 
 ### data storage 
 
-sensor:<id>:mesure:<timestamp> <json>
+```sensor:<id>:mesure:<timestamp> <json>```
 
 
 ## file-database-service 
