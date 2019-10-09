@@ -4,7 +4,7 @@
 
 ### config file : 
 
-`
+``
 [
   {
     "brokerUrl" : string,
@@ -15,7 +15,7 @@
   },
   ...
 ]
-`
+``
 
 ### PUBLISH sensor/mesure :
 
