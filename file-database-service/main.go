@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 type sensorData struct {
@@ -14,14 +15,10 @@ type sensorData struct {
 	AirportID   string
 	MesureType  string
 	MesureValue float64
-	Timestamp   float64
+	Timestamp   int64
 }
 
-const testData = `{"SensorID": 0, "AirportID": "NTE", "mesureType": "temp", "mesureValue": 17.33, "timestamp": 1570652403}`
-
-func timestampToDate(val interface{}) string {
-	return "2019-11-10:14:45:10"
-}
+const testData = `{"SensorID": 43, "AirportID": "NTE", "mesureType": "temp", "mesureValue": 17.33, "timestamp": 1570731034}`
 
 func main() {
 
@@ -39,7 +36,9 @@ func checkError(message string, err error) {
 }
 
 func addDataToCsv(row sensorData) {
-	var filename string = string(row.AirportID) + "-" + timestampToDate(row.Timestamp)[:10] + "-" + string(row.MesureType) + ".csv"
+	rowDatetime := getTime(row.Timestamp)
+
+	var filename string = string(row.AirportID) + "-" + rowDatetime[:10] + "-" + string(row.MesureType) + ".csv"
 
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	defer f.Close()
@@ -49,13 +48,20 @@ func addDataToCsv(row sensorData) {
 
 	writer := csv.NewWriter(f)
 	defer writer.Flush()
-	writer.Write([]string{strconv.FormatInt(row.SensorID, 32), row.AirportID, row.MesureType, floatToString(row.MesureValue), floatToString(row.Timestamp)})
+	writer.Write([]string{
+		strconv.FormatInt(row.SensorID, 10),
+		row.AirportID,
+		row.MesureType,
+		strconv.FormatFloat(row.MesureValue, 'f', 6, 32),
+		rowDatetime,
+	})
 	checkError("Cannot write to file", err)
 }
 
-func floatToString(val float64) string {
-	// to convert a float number to a string
-	return strconv.FormatFloat(val, 'f', 6, 32)
+func getTime(input int64) string {
+	var tm time.Time = time.Unix(input, 0)
+	var res string = tm.Format("2006-01-02 15:04:05")
+	return res
 }
 
 func fileExists(filename string) bool {
