@@ -17,45 +17,45 @@
 ]
 ```
 
-### PUBLISH on topic sensor/mesure
+### PUBLISH on topic sensor/measure
 
 ```
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
-  "mesureType" : string,
-  "mesureValue" : float,
+  "measureType" : string,
+  "measureValue" : float,
   "timestamp": unix timestamp (seconds)
 }
 ```
 
 ## redis-database-service 
 
-### SUBSCRIBE on topic sensor/mesure
+### SUBSCRIBE on topic sensor/measure
 ```
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
-  "mesureType" : string,
-  "mesureValue" : float,
+  "measureType" : string,
+  "measureValue" : float,
   "timestamp": unix timestamp (seconds)
 }
 ```
 
 ### data storage 
 
-```sensor:<sensorId>:mesure:<timestamp> <json>```
+```sensor:<sensorId>:measure:<timestamp> <json>```
 
 
 ## file-database-service 
 
-### SUBSCRIBE on topic sensor/mesure
+### SUBSCRIBE on topic sensor/measure
 ```
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
-  "mesureType" : string,
-  "mesureValue" : float,
+  "measureType" : string,
+  "measureValue" : float,
   "timestamp": unix timestamp (seconds)
 }
 ```
@@ -80,18 +80,18 @@
 {
   "sensorId" : int,
   "airportId" : string (IATA), 
-  "mesureType" : string
+  "measureType" : string
 }
 ```
 
-### GET /sensors/{sensorId}/mesures
+### GET /sensors/{sensorId}/measure
 ```
 [
   {
     "sensorId" : int,
     "airportId" : string (IATA), 
-    "mesureType" : string,
-    "mesureValue" : float,
+    "measureType" : string,
+    "measureValue" : float,
     "timestamp": unix timestamp (seconds) 
   },
   ...
@@ -104,8 +104,8 @@
   {
     "sensorId" : int,
     "airportId" : string (IATA), 
-    "mesureType" : string,
-    "mesureValue" : float,
+    "measureType" : string,
+    "measureValue" : float,
     "timestamp": unix timestamp (seconds)
   },
   ...
