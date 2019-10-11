@@ -7,32 +7,33 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync"
 	"time"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-type sensorData struct {
-	SensorID    int64
-	AirportID   string
-	MesureType  string
-	MesureValue float64
-	Timestamp   int64
-}
+const CsvDataPath = "./sensorsData/"
+const MqttBrokerURI = "tcp://localhost:1883"
+const MqttClientID = "sub2"
+const MqttTopic = "sensor/mesure"
 
-const testData = `{"SensorID": 43, "AirportID": "NTE", "mesureType": "temp", "mesureValue": 17.33, "timestamp": 1570731034}`
+// const testData = `{"SensorID": 43, "AirportID": "NTE", "mesureType": "temp", "mesureValue": 17.33, "timestamp": 1570731034}`
 
 func main() {
+	client := connect(MqttBrokerURI, MqttClientID)
+	var wg sync.WaitGroup
+	wg.Add(1)
 
-	// Each time we receive data from broker
 	data := sensorData{}
-	json.Unmarshal([]byte(testData), &data)
-	fmt.Println(data)
-	addDataToCsv(data)
-}
+	client.Subscribe(MqttTopic, 0, func(client mqtt.Client, msg mqtt.Message) {
+		// Each time we receive data from broker
+		json.Unmarshal([]byte(msg.Payload()), &data)
+		fmt.Println(data)
+		addDataToCsv(data)
+	})
 
-func checkError(message string, err error) {
-	if err != nil {
-		log.Fatal(message, err)
-	}
+	wg.Wait()
 }
 
 func addDataToCsv(row sensorData) {
@@ -40,14 +41,12 @@ func addDataToCsv(row sensorData) {
 
 	var filename string = string(row.AirportID) + "-" + rowDatetime[:10] + "-" + string(row.MesureType) + ".csv"
 
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(CsvDataPath+filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	defer f.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	writer := csv.NewWriter(f)
 	defer writer.Flush()
+	// Write line here
 	writer.Write([]string{
 		strconv.FormatInt(row.SensorID, 10),
 		row.AirportID,
@@ -55,7 +54,10 @@ func addDataToCsv(row sensorData) {
 		strconv.FormatFloat(row.MesureValue, 'f', 6, 32),
 		rowDatetime,
 	})
-	checkError("Cannot write to file", err)
+
+	if err != nil {
+		log.Fatal("Cannot write to file", err)
+	}
 }
 
 func getTime(input int64) string {
@@ -64,17 +66,30 @@ func getTime(input int64) string {
 	return res
 }
 
-func fileExists(filename string) bool {
-	info, err := os.Stat(filename)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return !info.IsDir()
+func createClientOptions(brokerURI string, clientID string) *mqtt.ClientOptions {
+	opts := mqtt.NewClientOptions()
+	opts.AddBroker(brokerURI)
+	opts.SetClientID(clientID)
+	return opts
 }
 
-func isError(err error) bool {
-	if err != nil {
-		fmt.Println(err.Error())
+func connect(brokerURI string, clientID string) mqtt.Client {
+	fmt.Println("Trying to connect (" + brokerURI + ", " + clientID + ")...")
+	opts := createClientOptions(brokerURI, clientID)
+	client := mqtt.NewClient(opts)
+	token := client.Connect()
+	for !token.WaitTimeout(3 * time.Second) {
 	}
-	return (err != nil)
+	if err := token.Error(); err != nil {
+		log.Fatal(err)
+	}
+	return client
+}
+
+type sensorData struct {
+	SensorID    int64
+	AirportID   string
+	MesureType  string
+	MesureValue float64
+	Timestamp   int64
 }
