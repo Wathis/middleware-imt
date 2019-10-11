@@ -61,6 +61,57 @@
 ```
 
 
+## api-service 
+
+
+### GET /sensors
+```
+[
+  {
+    "sensorId" : int,
+    "airportId" : string (IATA), 
+  },
+  ...
+]
+```
+
+### GET /sensors/{sensorId}
+```
+{
+  "sensorId" : int,
+  "airportId" : string (IATA), 
+  "mesureType" : string
+}
+```
+
+### GET /sensors/{sensorId}/mesures
+```
+[
+  {
+    "sensorId" : int,
+    "airportId" : string (IATA), 
+    "mesureType" : string,
+    "mesureValue" : float,
+    "timestamp": unix timestamp (seconds) 
+  },
+  ...
+]
+```
+
+### GET /mesures
+```
+[
+  {
+    "sensorId" : int,
+    "airportId" : string (IATA), 
+    "mesureType" : string,
+    "mesureValue" : float,
+    "timestamp": unix timestamp (seconds)
+  },
+  ...
+]
+```
+
 
 
 
