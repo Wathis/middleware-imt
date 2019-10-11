@@ -84,7 +84,7 @@
 }
 ```
 
-### GET /sensors/{sensorId}/measure
+### GET /sensors/{sensorId}/measures
 ```
 [
   {
