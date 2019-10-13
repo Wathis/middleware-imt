@@ -67,5 +67,7 @@ Swagger api with : https://editor.swagger.io
 
 Swagger xml doc : [swagger yml doc](https://github.com/Wathis/middleware-imt/blob/develop/api-service/docs/swagger.yaml)
 
+Just copy and paste xml doc into swagger editor
+
 
 
