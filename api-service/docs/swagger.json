@@ -1,0 +1,155 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Swagger API documentation for api-service",
+        "contact": {},
+        "license": {
+            "name": "GNU GPLv3",
+            "url": "https://www.gnu.org/licenses/gpl-3.0.fr.html"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/measures": {
+            "get": {
+                "description": "List all measures",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Measure"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/measures/{measure_type}": {
+            "get": {
+                "description": "List measures between timestamp",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "timestamp",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "timestamp",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Ex: temperature",
+                        "name": "measure_type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Measure"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/measures/{measure_type}/average": {
+            "get": {
+                "description": "Measure average for measure type",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Ex: temperature",
+                        "name": "measure_type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AverageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/sensors/{sensor_id}/measures": {
+            "get": {
+                "description": "Retrieve sensor measures for sensor id",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Ex: 1",
+                        "name": "sensor_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Measure"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Measure": {
+            "type": "object",
+            "properties": {
+                "airportId": {
+                    "type": "string"
+                },
+                "measureType": {
+                    "type": "string"
+                },
+                "measureValue": {
+                    "type": "number"
+                },
+                "sensorId": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handlers.AverageResponse": {
+            "type": "object",
+            "properties": {
+                "average": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

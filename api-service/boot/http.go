@@ -2,6 +2,7 @@ package boot
 
 import (
 	"api-service/infrastructure/handlers"
+	"api-service/infrastructure/middleware"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -11,11 +12,13 @@ import (
 func LoadRouter() {
 	r := mux.NewRouter()
 
+	r.Use(middleware.HttpLogger)
+
 	r.HandleFunc("/", handlers.Index)
 	r.HandleFunc("/measures", handlers.HandleMeasures)
-	r.HandleFunc("/sensors", handlers.HandleSensors)
-	r.HandleFunc("/sensors/{sensor_id}", handlers.HandleSensor)
-	r.HandleFunc("/sensors/{sensor_id}/measures", handlers.HandleSensorMeasures)
+	r.HandleFunc("/measures/{measure_type:[a-zA-Z]+}", handlers.HandleMeasuresWithMeasureType)
+	r.HandleFunc("/measures/{measure_type:[a-zA-Z]+}/average", handlers.HandleMeasureAverage)
+	r.HandleFunc("/sensors/{sensor_id:[0-9]+}/measures", handlers.HandleSensorMeasures)
 
 	srv := &http.Server{
 		Handler:      r,

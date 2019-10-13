@@ -2,6 +2,7 @@ package boot
 
 import (
 	"api-service/application"
+	"api-service/infrastructure/repository"
 	"fmt"
 	"github.com/go-redis/redis/v7"
 	"log"
@@ -20,4 +21,7 @@ func LoadRepositories() {
 		log.Panicf("Error ping redis, response instead of pong : %s", pong)
 	}
 	application.RedisClient = redisClient
+
+	application.MeasureRepository = repository.NewMeasureRepository()
+	application.SensorRepository = repository.NewSensorRepository()
 }
