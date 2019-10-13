@@ -63,8 +63,8 @@
 
 ## api-service 
 
-Swagger api with : (https://editor.swagger.io)
-Swagger xml doc : (https://github.com/Wathis/middleware-imt/blob/develop/api-service/docs/swagger.yaml)[swagger yml doc]
+Swagger api with : https://editor.swagger.io
+Swagger xml doc : https://github.com/Wathis/middleware-imt/blob/develop/api-service/docs/swagger.yaml[swagger yml doc]
 
 
 
