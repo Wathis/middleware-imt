@@ -1,0 +1,100 @@
+definitions:
+  domain.Measure:
+    properties:
+      airportId:
+        type: string
+      measureType:
+        type: string
+      measureValue:
+        type: number
+      sensorId:
+        type: integer
+      timestamp:
+        type: integer
+    type: object
+  handlers.AverageResponse:
+    properties:
+      average:
+        type: number
+    type: object
+info:
+  contact: {}
+  license:
+    name: GNU GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.fr.html
+  title: Swagger API documentation for api-service
+  version: "1.0"
+paths:
+  /measures:
+    get:
+      description: List all measures
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Measure'
+            type: array
+  /measures/{measure_type}:
+    get:
+      description: List measures between timestamp
+      parameters:
+      - description: timestamp
+        in: query
+        name: from
+        required: true
+        type: integer
+      - description: timestamp
+        in: query
+        name: to
+        required: true
+        type: integer
+      - description: 'Ex: temperature'
+        in: path
+        name: measure_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Measure'
+            type: array
+  /measures/{measure_type}/average:
+    get:
+      description: Measure average for measure type
+      parameters:
+      - description: 'Ex: temperature'
+        in: path
+        name: measure_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AverageResponse'
+  /sensors/{sensor_id}/measures:
+    get:
+      description: Retrieve sensor measures for sensor id
+      parameters:
+      - description: 'Ex: 1'
+        in: path
+        name: sensor_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Measure'
+swagger: "2.0"
