@@ -16,7 +16,7 @@ func CreateClientOptions(brokerURI string, clientID string) *mqtt.ClientOptions 
 }
 
 func Connect(brokerURI string, clientID string) mqtt.Client {
-	fmt.Println("Trying to connect (" + brokerURI + ", " + clientID + ")...")
+	fmt.Println("Connection to (" + brokerURI + ", " + clientID + ")...")
 	opts := CreateClientOptions(brokerURI, clientID)
 	client := mqtt.NewClient(opts)
 	token := client.Connect()
