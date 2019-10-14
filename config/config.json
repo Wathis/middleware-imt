@@ -1,0 +1,23 @@
+{
+    "sensorTemp": {
+        "brokerUrl" : "tcp://localhost",
+        "brokerPort" : 1883,
+        "sensorId" : 1,
+        "sensorType" : "TEMP",
+        "qos" : 1
+    },
+    "sensorWind": {
+        "brokerUrl" : "tcp://localhost",
+        "brokerPort" : 1883,
+        "sensorId" : 2,
+        "sensorType" : "WIND",
+        "qos" : 1
+    },
+    "sensorPressure": {
+        "brokerUrl" : "tcp://localhost",
+        "brokerPort" : 1883,
+        "sensorId" : 3,
+        "sensorType" : "PRESSURE",
+        "qos" : 1
+    }
+}
