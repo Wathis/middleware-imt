@@ -10,7 +10,7 @@ var (
 	BrokerPort   = "1883"
 	CsvDataPath  = "./sensorsData/"
 	MqttClientID = "sub2"
-	MqttTopic    = "sensor/mesure"
+	MqttTopic    = "sensor/measure"
 )
 
 func LoadEnv() {
