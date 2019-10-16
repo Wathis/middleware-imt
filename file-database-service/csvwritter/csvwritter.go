@@ -14,6 +14,8 @@ func AddDataToCsv(row sensor.SensorData, filePath string) {
 
 	var filename string = string(row.AirportID) + "-" + rowDatetime[:10] + "-" + string(row.MesureType) + ".csv"
 
+	_ = os.Mkdir(filePath, 0755)
+
 	f, err := os.OpenFile(filePath+filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	defer f.Close()
 
