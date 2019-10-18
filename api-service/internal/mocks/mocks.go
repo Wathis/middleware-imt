@@ -18,7 +18,7 @@ func (m *MeasureRepositoryMock) FindMeasures() ([]domain.Measure, error) {
 	}
 }
 
-func (m *MeasureRepositoryMock) FindMeasuresBetweenTimestamp(measureType string, from int, to int) ([]domain.Measure, error) {
+func (m *MeasureRepositoryMock) FindMeasuresBetweenTimestamp(measureType string, from int64, to int64) ([]domain.Measure, error) {
 	args := m.Called(measureType, from, to)
 	if args.Get(0) != nil {
 		return args.Get(0).([]domain.Measure), nil
@@ -27,12 +27,12 @@ func (m *MeasureRepositoryMock) FindMeasuresBetweenTimestamp(measureType string,
 	}
 }
 
-func (m *MeasureRepositoryMock) FindMeasureAverage(measureType string) (float64, error) {
-	args := m.Called(measureType)
-	if args.Get(0) != 0 {
-		return args.Get(0).(float64), nil
+func (m *MeasureRepositoryMock) FindMeasureAveragesForDay(timestamp int64) (map[string]float64, error) {
+	args := m.Called(timestamp)
+	if args.Error(1) != nil {
+		return nil, args.Error(1)
 	} else {
-		return -1, args.Error(1)
+		return args.Get(0).(map[string]float64), nil
 	}
 }
 

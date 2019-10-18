@@ -13,8 +13,8 @@ var (
 
 type MeasureRepositoryInterface interface {
 	FindMeasures() ([]domain.Measure, error)
-	FindMeasuresBetweenTimestamp(string, int, int) ([]domain.Measure, error)
-	FindMeasureAverage(string) (float64, error)
+	FindMeasuresBetweenTimestamp(string, int64, int64) ([]domain.Measure, error)
+	FindMeasureAveragesForDay(int64) (map[string]float64, error)
 }
 
 type SensorRepositoryInterface interface {

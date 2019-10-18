@@ -10,7 +10,7 @@ import (
 )
 
 type AverageResponse struct {
-	Average float64 `json:"average"`
+	Averages map[string]float64 `json:"averages"`
 }
 
 // HandleMeasures godoc
@@ -44,12 +44,12 @@ func HandleMeasuresWithMeasureType(rw http.ResponseWriter, r *http.Request) {
 		lib.RespondWithJson(rw, validationErrors, http.StatusBadRequest)
 		return
 	}
-	from, err := strconv.Atoi(r.URL.Query().Get("from"))
+	from, err := strconv.ParseInt(r.URL.Query().Get("from"), 10, 64)
 	if err != nil {
 		lib.RespondWithError(rw, err, http.StatusBadRequest)
 		return
 	}
-	to, err := strconv.Atoi(r.URL.Query().Get("to"))
+	to, err := strconv.ParseInt(r.URL.Query().Get("to"), 10, 64)
 	if err != nil {
 		lib.RespondWithError(rw, err, http.StatusBadRequest)
 		return
@@ -62,17 +62,23 @@ func HandleMeasuresWithMeasureType(rw http.ResponseWriter, r *http.Request) {
 	lib.RespondWithJson(rw, measures, http.StatusOK)
 }
 
-// HandleMeasureAverage godoc
-// @Description Measure average for measure type
+// HandleMeasureAverages godoc
+// @Description Measure average for day timestamp
 // @Produce  json
-// @Param measure_type path string true "Ex: temperature"
+// @Param day_timestamp path float64 true "Second timestamp of the day chosen (any timestamp during the day works)"
 // @Success 200 {object} handlers.AverageResponse
-// @Router /measures/{measure_type}/average [get]
-func HandleMeasureAverage(rw http.ResponseWriter, r *http.Request) {
-	average, err := application.MeasureRepository.FindMeasureAverage(mux.Vars(r)["measure_type"])
+// @Router /measures/{day_timestamp}/average [get]
+func HandleMeasureAverages(rw http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	dayChosenTimestamp, err := strconv.ParseInt(vars["day_timestamp"], 10, 64)
+	if err != nil {
+		lib.RespondWithError(rw, err, http.StatusBadRequest)
+		return
+	}
+	averages, err := application.MeasureRepository.FindMeasureAveragesForDay(dayChosenTimestamp)
 	if err != nil {
 		lib.RespondWithError(rw, err, http.StatusInternalServerError)
 		return
 	}
-	lib.RespondWithJson(rw, AverageResponse{Average: average}, http.StatusOK)
+	lib.RespondWithJson(rw, AverageResponse{Averages: averages}, http.StatusOK)
 }
