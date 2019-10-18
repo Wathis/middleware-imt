@@ -4,6 +4,7 @@ import (
 	"api-service/application"
 	"api-service/lib"
 	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
 	"net/http"
 	"strconv"
 )
@@ -15,7 +16,11 @@ import (
 // @Success 200 {object} domain.Measure
 // @Router /sensors/{sensor_id}/measures [get]
 func HandleSensorMeasures(rw http.ResponseWriter, r *http.Request) {
-	sensorId, _ := strconv.Atoi(mux.Vars(r)["sensor_id"])
+	sensorId, err := strconv.Atoi(mux.Vars(r)["sensor_id"])
+	if err != nil {
+		lib.RespondWithError(rw, errors.Wrap(err, "can't parse sensor_id as integer"), http.StatusBadRequest)
+		return
+	}
 	measures, err := application.SensorRepository.FindSensorMeasures(sensorId)
 	if err != nil {
 		lib.RespondWithError(rw, err, http.StatusInternalServerError)

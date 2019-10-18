@@ -37,7 +37,7 @@ func (m *MeasureRepository) FindMeasureAveragesForDay(dayChosenTimestamp int64) 
 	dayEndTimestamp := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 59, 59, 0, currentTime.Location()).Unix()
 	measureTypeKeys, _, err := application.RedisClient.Scan(0, "measure_timestamp:*", 0).Result()
 	if err != nil {
-		return nil, errors.Wrapf(err, "can't scan measure_timestamp for timestamp : %i", dayChosenTimestamp)
+		return nil, errors.Wrapf(err, "can't scan measure_timestamp for timestamp : %d", dayChosenTimestamp)
 	}
 	measureAverages := make(map[string]float64)
 	for _, measureTypeKey := range measureTypeKeys {

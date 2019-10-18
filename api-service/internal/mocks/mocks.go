@@ -42,7 +42,7 @@ type SensorRepositoryMock struct {
 
 func (m *SensorRepositoryMock) FindSensorMeasures(sensorId int) (measures []domain.Measure, err error) {
 	args := m.Called(sensorId)
-	if args.Get(0) != 0 {
+	if args.Get(0) != nil {
 		return args.Get(0).([]domain.Measure), nil
 	} else {
 		return nil, args.Error(1)
