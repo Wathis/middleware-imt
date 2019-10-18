@@ -13,11 +13,12 @@ func LoadRouter() {
 	r := mux.NewRouter()
 
 	r.Use(middleware.HttpLogger)
+	r.Use(middleware.CorsHeaders)
 
 	r.HandleFunc("/", handlers.Index)
 	r.HandleFunc("/measures", handlers.HandleMeasures)
 	r.HandleFunc("/measures/{measure_type:[a-zA-Z]+}", handlers.HandleMeasuresWithMeasureType)
-	r.HandleFunc("/measures/{measure_type:[a-zA-Z]+}/average", handlers.HandleMeasureAverage)
+	r.HandleFunc("/measures/{day_timestamp:[0-9]+}/average", handlers.HandleMeasureAverages)
 	r.HandleFunc("/sensors/{sensor_id:[0-9]+}/measures", handlers.HandleSensorMeasures)
 
 	srv := &http.Server{

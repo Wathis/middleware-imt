@@ -29,9 +29,9 @@ func RespondWithJson(rw http.ResponseWriter, payload interface{}, httpStatus int
 	_, _ = rw.Write(body)
 }
 
-func RespondWithError(rw http.ResponseWriter, error interface{}, httpStatus int) {
+func RespondWithError(rw http.ResponseWriter, error error, httpStatus int) {
 	log.Print(error)
-	body, err := json.Marshal(Error{Error: error})
+	body, err := json.Marshal(Error{Error: error.Error()})
 	if err != nil {
 		log.Print(err)
 		return
