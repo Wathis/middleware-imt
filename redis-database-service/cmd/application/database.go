@@ -13,9 +13,9 @@ func LaunchRedisServer() {
 }
 
 func execute() {
-
+	// TODO : Lancer le serveur redis
 }
 
 func executeWindows() {
-
+	// TODO : Lancer le serveur redis
 }

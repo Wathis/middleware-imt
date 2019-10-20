@@ -23,6 +23,7 @@ func Save(data entities.Mesure) {
 	fmt.Println("Valeur : " + fmt.Sprintf("%s", dataJSON))
 	doCommand(conn, "SET", key, fmt.Sprintf("%s", dataJSON))
 
+	// TODO : Résoudre problème du nombre de paramètres pour la commande ZADD
 	keySet := getKeyZaddTimestamp(data)
 	fmt.Println("keySet : " + keySet + " Valeur : " + fmt.Sprintf("%d", data.Timestamp) + " key :" + key)
 	doCommand(conn, "ZADD", keySet, data.Timestamp, key)
