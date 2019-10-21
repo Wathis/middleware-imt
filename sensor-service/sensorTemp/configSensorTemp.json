@@ -1,0 +1,8 @@
+{
+    "intervalSendDataSensor": 10,
+    "brokerUrl": "tcp://localhost",
+    "brokerPort": 1883,
+    "sensorId": 1,
+    "sensorType": "TEMP",
+    "qos": 1
+}
