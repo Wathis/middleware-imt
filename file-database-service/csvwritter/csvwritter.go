@@ -12,7 +12,7 @@ import (
 func AddDataToCsv(row sensor.SensorData, filePath string) {
 	rowDatetime := getTime(row.Timestamp)
 
-	var filename string = string(row.AirportID) + "-" + rowDatetime[:10] + "-" + string(row.MesureType) + ".csv"
+	var filename string = string(row.AirportID) + "-" + rowDatetime[:10] + "-" + string(row.MeasureType) + ".csv"
 
 	_ = os.Mkdir(filePath, 0755)
 
@@ -25,8 +25,8 @@ func AddDataToCsv(row sensor.SensorData, filePath string) {
 	writer.Write([]string{
 		strconv.FormatInt(row.SensorID, 10),
 		row.AirportID,
-		row.MesureType,
-		strconv.FormatFloat(row.MesureValue, 'f', 6, 32),
+		row.MeasureType,
+		strconv.FormatFloat(row.MeasureValue, 'f', 6, 32),
 		rowDatetime,
 	})
 

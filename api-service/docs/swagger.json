@@ -29,6 +29,31 @@
                 }
             }
         },
+        "/measures/{day_timestamp}/average": {
+            "get": {
+                "description": "Measure average for day timestamp",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "Second timestamp of the day chosen (any timestamp during the day works)",
+                        "name": "day_timestamp",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AverageResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/measures/{measure_type}": {
             "get": {
                 "description": "List measures between timestamp",
@@ -66,31 +91,6 @@
                             "items": {
                                 "$ref": "#/definitions/domain.Measure"
                             }
-                        }
-                    }
-                }
-            }
-        },
-        "/measures/{measure_type}/average": {
-            "get": {
-                "description": "Measure average for measure type",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Ex: temperature",
-                        "name": "measure_type",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.AverageResponse"
                         }
                     }
                 }
@@ -146,8 +146,8 @@
         "handlers.AverageResponse": {
             "type": "object",
             "properties": {
-                "average": {
-                    "type": "number"
+                "averages": {
+                    "type": "object"
                 }
             }
         }

@@ -9,6 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"log"
 	"strconv"
+	"strings"
+	"time"
 )
 
 type MeasureRepository struct {
@@ -26,34 +28,29 @@ func (m *MeasureRepository) FindMeasures() (measures []domain.Measure, err error
 	return getMeasuresForKeys(keys)
 }
 
-func (m *MeasureRepository) FindMeasuresBetweenTimestamp(measureType string, from int, to int) (measures []domain.Measure, err error) {
-	measureKey := fmt.Sprintf("measure_timestamp:%s", measureType)
-	opts := &redis.ZRangeBy{
-		Min:    strconv.Itoa(from),
-		Max:    strconv.Itoa(to),
-		Offset: 0,
-		Count:  0,
-	}
-	keys, err := application.RedisClient.ZRangeByScore(measureKey, opts).Result()
-	if err != nil {
-		return nil, errors.Wrapf(err, "can't get result of ZRangeByScore from key %s and options %v", measureKey, opts)
-	}
-	return getMeasuresForKeys(keys)
+func (m *MeasureRepository) FindMeasuresBetweenTimestamp(measureType string, from int64, to int64) (measures []domain.Measure, err error) {
+	return findMeasureBetweenTimestamp(measureType, from, to)
 }
-func (m *MeasureRepository) FindMeasureAverage(measureType string) (float64, error) {
-	measureKey := fmt.Sprintf("measure_value:%s", measureType)
-	keysWithScore, err := application.RedisClient.ZRangeWithScores(fmt.Sprintf("measure_value:%s", measureType), 0, -1).Result()
+func (m *MeasureRepository) FindMeasureAveragesForDay(dayChosenTimestamp int64) (map[string]float64, error) {
+	currentTime := time.Unix(dayChosenTimestamp, 0)
+	dayStartTimestamp := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location()).Unix()
+	dayEndTimestamp := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 59, 59, 0, currentTime.Location()).Unix()
+	measureTypeKeys, _, err := application.RedisClient.Scan(0, "measure_timestamp:*", 0).Result()
 	if err != nil {
-		return -1, errors.Wrapf(err, "can't get result of ZRange for key : %v", measureKey)
+		return nil, errors.Wrapf(err, "can't scan measure_timestamp for timestamp : %i", dayChosenTimestamp)
 	}
-	if len(keysWithScore) == 0 {
-		return 0, nil
+	measureAverages := make(map[string]float64)
+	for _, measureTypeKey := range measureTypeKeys {
+		measureType := strings.Split(measureTypeKey, ":")[1]
+		measures, err := findMeasureBetweenTimestamp(measureType, dayStartTimestamp, dayEndTimestamp)
+		if err != nil {
+			return nil, err
+		}
+		if len(measures) > 0 {
+			measureAverages[measureType] = getMeasuresAverage(measures)
+		}
 	}
-	total := 0.0
-	for i := 0; i < len(keysWithScore); i++ {
-		total += keysWithScore[i].Score
-	}
-	return total / float64(len(keysWithScore)), nil
+	return measureAverages, nil
 }
 
 func getMeasuresForKeys(keys []string) (measures []domain.Measure, err error) {
@@ -71,4 +68,29 @@ func getMeasuresForKeys(keys []string) (measures []domain.Measure, err error) {
 		measures = append(measures, measure)
 	}
 	return measures, nil
+}
+func getMeasuresAverage(measures []domain.Measure) float64 {
+	total := 0.0
+	if len(measures) == 0 {
+		return 0
+	}
+	for _, measure := range measures {
+		total += measure.MeasureValue
+	}
+	return total / float64(len(measures))
+}
+
+func findMeasureBetweenTimestamp(measureType string, from int64, to int64) ([]domain.Measure, error) {
+	measureKey := fmt.Sprintf("measure_timestamp:%s", measureType)
+	opts := &redis.ZRangeBy{
+		Min:    strconv.FormatInt(from, 10),
+		Max:    strconv.FormatInt(to, 10),
+		Offset: 0,
+		Count:  0,
+	}
+	keys, err := application.RedisClient.ZRangeByScore(measureKey, opts).Result()
+	if err != nil {
+		return nil, errors.Wrapf(err, "can't get result of ZRangeByScore from key %s and options %v", measureKey, opts)
+	}
+	return getMeasuresForKeys(keys)
 }

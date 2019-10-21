@@ -14,8 +14,8 @@ definitions:
     type: object
   handlers.AverageResponse:
     properties:
-      average:
-        type: number
+      averages:
+        type: object
     type: object
 info:
   contact: {}
@@ -37,6 +37,23 @@ paths:
             items:
               $ref: '#/definitions/domain.Measure'
             type: array
+  /measures/{day_timestamp}/average:
+    get:
+      description: Measure average for day timestamp
+      parameters:
+      - description: Second timestamp of the day chosen (any timestamp during the
+          day works)
+        in: path
+        name: day_timestamp
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AverageResponse'
   /measures/{measure_type}:
     get:
       description: List measures between timestamp
@@ -65,22 +82,6 @@ paths:
             items:
               $ref: '#/definitions/domain.Measure'
             type: array
-  /measures/{measure_type}/average:
-    get:
-      description: Measure average for measure type
-      parameters:
-      - description: 'Ex: temperature'
-        in: path
-        name: measure_type
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handlers.AverageResponse'
   /sensors/{sensor_id}/measures:
     get:
       description: Retrieve sensor measures for sensor id
