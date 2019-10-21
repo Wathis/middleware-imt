@@ -15,13 +15,7 @@ func RandomSensorData(name string, min float64, max float64, config config.Confi
 	rValue := min + rand.Float64()*(max-min)
 
 	//JSON to return
-	sensorData := `{
-		"SensorID":` + strconv.FormatInt(config.SensorID, 10) + `,
-		"AirportID":` + name + `,
-		"MesureType":"` + config.SensorType + `",
-		"MesureValue":` + strconv.FormatFloat((math.Floor(rValue*100)/100), 'f', 6, 64) + `,
-		"Timestamp":` + strconv.FormatInt(time.Now().Unix(), 10) + `
-	}`
+	sensorData := `{"SensorID":` + strconv.FormatInt(config.SensorID, 10) + `,"AirportID":"` + name + `","MeasureType":"` + config.SensorType + `","MeasureValue":` + strconv.FormatFloat((math.Floor(rValue*100)/100), 'f', 6, 64) + `,"Timestamp":` + strconv.FormatInt(time.Now().Unix(), 10) + `}`
 
 	return sensorData, rValue
 }
