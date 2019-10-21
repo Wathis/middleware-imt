@@ -4,19 +4,31 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Container from '@material-ui/core/Container';
+import { withStyles } from '@material-ui/core/styles';
+import 'typeface-roboto';
 import Title from './Title';
+import axios from 'axios';
 
+
+const styles = theme => ({
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+});
 
 class Moyennes extends React.Component {
+  
   constructor() {
     super();
     this.state = {
+      averages: {},
       wind: {
         isLoaded: false,
         average: null
       },
-      temp: {
+      temperature: {
         isLoaded: false,
         average: null
       },
@@ -28,53 +40,64 @@ class Moyennes extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8080/measures/wind/average", {method: 'GET', mode: 'no-cors'})
-      .then(function(res){
-        console.log(res)
-        return res
-      })
-      .then(
-        (result) => {
-          console.log(result)
-        },
-        (error) => {
-          console.log(error)
-        }
-      )
+    console.log("run axios get on: http://localhost:8080/measures/1570966444/average")
+    axios.get('/measures/1570966450/average', {
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+    .then(response => {
+      console.log(response.data);
+      this.setState({averages: response.data.averages})
+      if (response.data.averages.temperature) {
+        this.setState({ temperature: { isLoaded: true, average: response.data.averages.temperature }})
+      }
+      if (response.data.averages.wind) {
+        this.setState({ wind: { isLoaded: true, average: response.data.averages.wind }})
+      }
+      if (response.data.averages.pressure) {
+        this.setState({ pressure: { isLoaded: true, average: response.data.averages.pressure }})
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   render() {
+    const { classes } = this.props;
+
+    let displayMeasures = {
+      "temperature": "Temperature : ",
+      "pressure": "Pression : ",
+      "wind": "Vent : ",
+    }
+    this.state.temperature.isLoaded ? displayMeasures.temperature += this.state.temperature.average + " °c" : displayMeasures.temperature += 'Pas de données'
+    this.state.pressure.isLoaded ? displayMeasures.pressure += this.state.pressure.average + " Pa" : displayMeasures.pressure += 'Pas de données'
+    this.state.wind.isLoaded ? displayMeasures.wind += this.state.wind.average + " km/h" : displayMeasures.wind += 'Pas de données'
+
     return (
-      <React.Fragment>
-        <Title>Moyenne par type</Title>
-        <Container maxWidth="lg" className="">
+      <>
+        <Title>Moyennes des relevés aujourd'hui</Title>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4} lg={4}>
-              <Paper>
-                <Typography color="initial">
-                  Temperature : {toString(this.state.wind.average)}
-                </Typography>
+            <Grid item xs={4}>
+              <Paper className={classes.paper}>
+                <Typography variant="h6">{displayMeasures.temperature}</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={4} lg={4}>
-              <Paper>
-                <Typography color="initial">
-                  Vent :
-                </Typography>
+            <Grid item xs={4}>
+              <Paper className={classes.paper}>
+                <Typography variant="h6">{displayMeasures.wind}</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={4} lg={4}>
-              <Paper>
-                <Typography color="initial">
-                  Pression :
-                </Typography>
+            <Grid item xs={4}>
+              <Paper className={classes.paper}>
+                <Typography variant="h6">{displayMeasures.pressure}</Typography>
               </Paper>
             </Grid>
           </Grid>
-        </Container>
-      </React.Fragment>
+      </>
     )
   }
 }
 
-export default Moyennes;
+export default withStyles(styles)(Moyennes);
