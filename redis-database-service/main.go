@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"redis-database-service/cmd/boot"
+	"redis-database-service/boot"
 )
 
 func main() {

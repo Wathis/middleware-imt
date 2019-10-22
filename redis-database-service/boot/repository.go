@@ -11,7 +11,7 @@ import (
 
 func LoadRepositories() {
 	redisClient := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%s", RedisURI, RedisPort),
+		Addr: fmt.Sprintf("%s:%s", redisURI, redisPort),
 		DB:   0, // use default DB
 	})
 	pong, err := redisClient.Ping().Result()
