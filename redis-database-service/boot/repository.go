@@ -3,7 +3,8 @@ package boot
 import (
 	"fmt"
 	"log"
-	"redis-database-service/cmd/application"
+	"redis-database-service/application"
+	"redis-database-service/infrastructure/repository"
 
 	"github.com/go-redis/redis/v7"
 )
@@ -20,6 +21,8 @@ func LoadRepositories() {
 	if pong != "PONG" {
 		log.Panicf("Error ping redis, response instead of pong : %s", pong)
 	}
+
+	// Initialisation des connecteurs vers la base et des interfaces (DAO)
 	application.RedisClient = redisClient
 	application.MeasureRepository = repository.NewMeasureRepository()
 }

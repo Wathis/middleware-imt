@@ -1,6 +1,8 @@
 package application
 
 import (
+	"redis-database-service/domain"
+
 	"github.com/go-redis/redis"
 )
 
@@ -10,5 +12,5 @@ var (
 )
 
 type MeasureRepositoryInterface interface {
-	SaveMeasure() error
+	SaveMeasure(measure domain.Measure) error
 }

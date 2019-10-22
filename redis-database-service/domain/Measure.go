@@ -1,6 +1,6 @@
-package entities
+package domain
 
-// Mesure : Structure stockant les informations envoyées en json pour décrire une mesure
+// Measure : Structure stockant les informations envoyées en json pour décrire une mesure
 type Measure struct {
 	SensorID     int     `json:"sensorId"`
 	AirportID    string  `json:"airportId"`
