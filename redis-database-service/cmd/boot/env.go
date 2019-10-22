@@ -6,21 +6,21 @@ import (
 )
 
 var (
-	BrockerURI  = "tcp://localhost"
-	BrockerPort = "1883"
-	RedisURI    = "127.0.0.1"
-	RedisPort   = "6379"
-	ClientID    = "sub1"
-	TopicName   = "sensor/measure"
+	brockerURI  = "tcp://localhost"
+	brockerPort = "1883"
+	redisURI    = "127.0.0.1"
+	redisPort   = "6379"
+	clientID    = "sub1"
+	topicName   = "sensor/measure"
 )
 
 func LoadEnv() {
-	LoadEnvVariable("BROCKER_URL", &BrockerURI)
-	LoadEnvVariable("BROCKER_PORT", &BrockerPort)
-	LoadEnvVariable("REDIS_URL", &RedisURI)
-	LoadEnvVariable("REDIS_PORT", &RedisPort)
-	LoadEnvVariable("CLIENT_ID", &ClientID)
-	LoadEnvVariable("TOPIC_NAME", &TopicName)
+	LoadEnvVariable("BROCKER_URL", &brockerURI)
+	LoadEnvVariable("BROCKER_PORT", &brockerPort)
+	LoadEnvVariable("REDIS_URL", &redisURI)
+	LoadEnvVariable("REDIS_PORT", &redisPort)
+	LoadEnvVariable("CLIENT_ID", &clientID)
+	LoadEnvVariable("TOPIC_NAME", &topicName)
 }
 
 func LoadEnvVariable(key string, variable *string) {

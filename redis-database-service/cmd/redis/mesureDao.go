@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"redis-database-service/cmd/dao"
+	"redis-database-service/cmd/application"
 	entities "redis-database-service/internal/entities"
-	"strconv"
 
-	"github.com/gomodule/redigo/redis"
+	redis "github.com/go-redis/redis/v7"
 )
 
-// Save : Initialise la connexion et insère l'entité Mesure dans la base de données
-func Save(data entities.Mesure) {
-	conn := dao.Connexion.Get()
+// mosquitto_pub -h 127.0.0.1 -p 1883 -t "sensor/measure" -m "{\"sensorId\":1,\"airportId\":\"CDG\",\"measureType\":\"temperature\",\"measureValue\":10.7,\"timestamp\":1570966444}"
+// Save : Initialise la connexion et insère l'entité Measure dans la base de données
+func Save(data entities.Measure) {
+	conn := application.RedisClient
 	defer conn.Close()
 	dataJSON, err := json.Marshal(data)
 	if err != nil {
@@ -21,43 +21,19 @@ func Save(data entities.Mesure) {
 	}
 	key := getKeySet(data)
 	fmt.Println("Valeur : " + fmt.Sprintf("%s", dataJSON))
-	doCommand(conn, "SET", key, fmt.Sprintf("%s", dataJSON))
+	conn.Set(key, fmt.Sprintf("%s", dataJSON), 0)
 
-	// TODO : Résoudre problème du nombre de paramètres pour la commande ZADD
 	keySet := getKeyZaddTimestamp(data)
 	fmt.Println("keySet : " + keySet + " Valeur : " + fmt.Sprintf("%d", data.Timestamp) + " key :" + key)
-	doCommand(conn, "ZADD", keySet, data.Timestamp, key)
+	conn.ZAdd(keySet, &redis.Z{
+		Score:  float64(data.Timestamp),
+		Member: key,
+	})
+
 	keySet = getKeyZaddValue(data)
-	fmt.Println("keySet : " + keySet + " Valeur : " + fmt.Sprintf("%f", data.MesureValue) + " key :" + key)
-	doCommand(conn, "ZADD", keySet, int(data.MesureValue), key)
-
-}
-
-func doCommand(conn redis.Conn, command string, key string, args ...interface{}) {
-	_, err := conn.Do(command, key, args)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func getKeySet(mesure entities.Mesure) string {
-	key := "sensor"
-	key += ":" + strconv.Itoa(mesure.SensorID)
-	key += ":measure"
-	key += ":" + strconv.Itoa(mesure.Timestamp)
-	fmt.Println("Key : " + key)
-	return key
-
-}
-
-func getKeyZaddValue(mesure entities.Mesure) string {
-	key := "measure_value"
-	key += ":" + mesure.MesureType
-	return key
-}
-
-func getKeyZaddTimestamp(mesure entities.Mesure) string {
-	key := "measure_timestamp"
-	key += ":" + mesure.MesureType
-	return key
+	fmt.Println("keySet : " + keySet + " Valeur : " + fmt.Sprintf("%f", data.MeasureValue) + " key :" + key)
+	conn.ZAdd(keySet, &redis.Z{
+		Score:  data.MeasureValue,
+		Member: key,
+	})
 }
