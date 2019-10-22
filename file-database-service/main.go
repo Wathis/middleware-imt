@@ -1,34 +1,21 @@
 package main
 
 import (
-	"encoding/json"
 	"file-database-service/boot"
-	"file-database-service/csvwritter"
-	"file-database-service/mqtttools"
-	"file-database-service/sensor"
-	"fmt"
-	"sync"
-
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"log"
 )
 
 // const testData = `{"SensorID": 43, "AirportID": "NTE", "mesureType": "temp", "mesureValue": 17.33, "timestamp": 1570731034}`
 
 func main() {
 
+	log.Print("starting file-database-service")
+	log.Print("Loading env")
+	boot.LoadEnv()
+	log.Print("Loading repository")
+	boot.LoadRepositories()
+	log.Print("Listening Brocker...")
+	boot.ListenBrocker()
 	boot.LoadEnv()
 
-	client := mqtttools.Connect("tcp://"+boot.BrokerUrl+":"+boot.BrokerPort, boot.MqttClientID)
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	data := sensor.SensorData{}
-	client.Subscribe(boot.MqttTopic, 0, func(client mqtt.Client, msg mqtt.Message) {
-		// Each time we receive data from broker
-		json.Unmarshal([]byte(msg.Payload()), &data)
-		fmt.Println("Data received: ", data)
-		csvwritter.AddDataToCsv(data, boot.CsvDataPath)
-	})
-
-	wg.Wait()
 }

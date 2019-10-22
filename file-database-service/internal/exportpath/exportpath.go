@@ -1,0 +1,5 @@
+package exportpath
+
+var (
+	FileExportPath = ""
+)
