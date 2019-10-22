@@ -44,8 +44,6 @@
 
 ### data storage 
 
-```sensor:<sensorId>:measure:<timestamp> <json>```
-
 [Redis scheme](https://github.com/Wathis/middleware-imt/blob/develop/docs/redis_scheme.png)
 
 #### Test data
@@ -77,17 +75,6 @@ EXEC
 
 
 ## api-service 
-
-### GET /sensors
-```
-[
-  {
-    "sensorId" : int,
-    "airportId" : string (IATA), 
-  },
-  ...
-]
-```
 
 ### GET /sensors/{sensorId}
 ```
