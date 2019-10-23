@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"redis-database-service/application"
 	"redis-database-service/domain"
@@ -14,7 +15,11 @@ func MeasureHandler(client mqtt.Client, msg mqtt.Message) {
 	// Parse le JSON dans un objet à chaque reception d'un message sur le topic
 	data := domain.Measure{}
 	log.Println("Message reçu : " + string(msg.Payload()))
-	json.Unmarshal([]byte(msg.Payload()), &data)
+	err := json.Unmarshal([]byte(msg.Payload()), &data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	// Ajoute la measure dans la base de données
 	go application.MeasureRepository.SaveMeasure(data)
 }
