@@ -40,8 +40,9 @@ class Moyennes extends React.Component {
   }
 
   componentDidMount() {
-    console.log("run axios get on: http://localhost:8080/measures/1570966444/average")
-    axios.get('/measures/1570966450/average', {
+    let t = Math.round(new Date() / 1000)
+    console.log("run axios get on: /measures/" + t + "/average")
+    axios.get('/measures/'+ t +'/average', {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
