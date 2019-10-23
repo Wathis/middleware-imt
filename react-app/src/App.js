@@ -166,6 +166,10 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
+            {/* Moyenne des temperatures de la journée */}
+            <Grid item xs={12} md={12} lg={12}>
+                <Moyennes />
+            </Grid>
             {/* Chart */}
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
@@ -180,12 +184,6 @@ export default function Dashboard() {
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
                 <ChartPressure />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={12} lg={12}>
-              <Paper className={fixedHeightPaper}>
-                <Moyennes />
               </Paper>
             </Grid>
           </Grid>
