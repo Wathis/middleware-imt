@@ -19,11 +19,11 @@
 
 ```
 {
-  "SensorID" : int,
-  "AirportID" : string (IATA), 
-  "MeasureType" : string,
-  "MeasureValue" : float,
-  "Timestamp": unix timestamp (seconds)
+  "sensorId" : int64,
+  "airportId" : string (IATA), 
+  "measureType" : string,
+  "measureValue" : float64,
+  "timestamp": int64
 }
 ```
 

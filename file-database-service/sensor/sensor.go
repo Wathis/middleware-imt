@@ -1,9 +1,9 @@
 package sensor
 
 type SensorData struct {
-	SensorID     int64
-	AirportID    string
-	MeasureType  string
-	MeasureValue float64
-	Timestamp    int64
+	SensorID     int64   `json:"sensorId"`
+	AirportID    string  `json:"airportId"`
+	MeasureType  string  `json:"measureType"`
+	MeasureValue float64 `json:"measureValue"`
+	Timestamp    int64   `json:"timestamp"`
 }
