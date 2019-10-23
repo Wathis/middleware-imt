@@ -76,43 +76,6 @@ EXEC
 
 ## api-service 
 
-### GET /sensors/{sensorId}
-```
-{
-  "sensorId" : int,
-  "airportId" : string (IATA), 
-  "measureType" : string
-}
-```
-
-### GET /sensors/{sensorId}/measures
-```
-[
-  {
-    "sensorId" : int,
-    "airportId" : string (IATA), 
-    "measureType" : string,
-    "measureValue" : float,
-    "timestamp": unix timestamp (seconds) 
-  },
-  ...
-]
-```
-
-### GET /mesures
-```
-[
-  {
-    "sensorId" : int,
-    "airportId" : string (IATA), 
-    "measureType" : string,
-    "measureValue" : float,
-    "timestamp": unix timestamp (seconds)
-  },
-  ...
-]
-```
-
 Swagger api with : https://editor.swagger.io
 
 Swagger xml doc : [swagger yml doc](https://github.com/Wathis/middleware-imt/blob/develop/api-service/docs/swagger.yaml)
