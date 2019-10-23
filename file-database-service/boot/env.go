@@ -11,7 +11,7 @@ var (
 	brokerPort     = "1883"
 	clientID       = "sub2"
 	topicName      = "sensor/measure"
-	fileExportPath = "C:/Users/cedri/Desktop/sensorMeasures"
+	fileExportPath = "./sensorService"
 )
 
 func LoadEnv() {
