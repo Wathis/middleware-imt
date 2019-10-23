@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"file-database-service/application"
 	"file-database-service/domain"
+	"fmt"
 	"log"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -13,8 +14,12 @@ import (
 func MeasureHandler(client mqtt.Client, msg mqtt.Message) {
 	// Parse le JSON dans un objet à chaque reception d'un message sur le topic
 	data := domain.Measure{}
-	log.Println("Message reçu : " + string(msg.Payload()))
-	json.Unmarshal([]byte(msg.Payload()), &data)
+	log.Printf("Message reçu : %s", string(msg.Payload()))
+	err := json.Unmarshal([]byte(msg.Payload()), &data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	// Ajoute la measure dans la base de données
 	go application.MeasureRepository.SaveMeasure(data)
 }
