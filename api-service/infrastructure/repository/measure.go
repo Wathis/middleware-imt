@@ -21,7 +21,15 @@ func NewMeasureRepository() *MeasureRepository {
 }
 
 func (m *MeasureRepository) FindMeasures() (measures []domain.Measure, err error) {
-	keys, _, err := application.RedisClient.Scan(0, "sensor:*", 0).Result()
+	var cursor uint64 = 0
+	var nextCursor uint64 = 1
+	var keys []string
+	var keysForCurrentCursor []string
+	for nextCursor != 0 {
+		keysForCurrentCursor, nextCursor, err = application.RedisClient.Scan(cursor, "sensor:*", 0).Result()
+		cursor = nextCursor
+		keys = append(keys, keysForCurrentCursor...)
+	}
 	if err != nil {
 		return nil, errors.Wrap(err, "can't scan sensors")
 	}
