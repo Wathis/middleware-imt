@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"../config"
+	config "config"
 )
 
 func RandomSensorData(name string, min float64, max float64, config config.Config) (string, float64) {

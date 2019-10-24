@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"../common"
-	"../config"
-	"../mqtt"
+	common "common"
+	config "config"
+	mqtt "mqtt"
 )
 
 const topic = "sensor/measure"
