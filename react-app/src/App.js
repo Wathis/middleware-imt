@@ -7,12 +7,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Moyennes from './components/Moyennes';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import SelectAirport from './components/SelectAirport';
 import axios from 'axios';
 import Chart from './components/Chart';
 
@@ -45,8 +42,10 @@ const styles = theme => ({
   fixedHeight: {
     height: 240,
   },
+  centerText: {
+    textAlign: "center",
+  },
 });
-
 
 class App extends React.Component {
 
@@ -57,16 +56,21 @@ class App extends React.Component {
       airportList: ["NTE", "CDG", "LYS"],
       measures: [],
     }
+    this.handleChangeSelectedAirport = this.handleChangeSelectedAirport.bind(this)
   }
 
-  handleChangeSelect(event){
-    this.setState({ airportId: event.target.value});
+  handleChangeSelectedAirport(airport) {
+    this.setState({ airportId: airport })
+  }
+
+  componentDidMount() {
+    this.loadGraphData()
   }
 
   render() {
     const { classes } = this.props;
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    
+
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -85,35 +89,17 @@ class App extends React.Component {
               <Grid item xs={12} md={12} lg={12}>
                 <Moyennes />
               </Grid>
-              <Divider variant="middle" />
-              <Grid container item xs={12}>
-                <Grid item xs={0} md={4} lg={4}>
-                </Grid>
-                <Grid item xs={12} md={4} lg={4}>
-                  <Paper className={classes.paper}>
-                    <Typography variant="h6">Choisir un aéroport</Typography>
-                    <InputLabel htmlFor="airport-simple"></InputLabel>
-                    <Select
-                      value={this.state.airportId}
-                      defaultValue={this.state.airportId}
-                      onChange={this.handleChangeSelect.bind(this)}
-                      inputProps={{
-                        name: 'airport',
-                        id: 'airport-simple',
-                      }}
-                    >
-                      {this.state.airportList.map((answer, i) => {  
-                        return (<MenuItem key={i} value={answer}>{answer}</MenuItem>) 
-                      })}
-                    </Select>
-                  </Paper>
-                </Grid>
+              <Grid item xs={12}>
+                <SelectAirport 
+                  airportList={["NTE", "CDG", "LYS"]}
+                  onAirportChange={this.handleChangeSelectedAirport}
+                />
               </Grid>
-              
+
               {/* Chart */}
               <Grid item xs={12} md={12} lg={12}>
                 <Paper className={fixedHeightPaper}>
-                  <Chart 
+                  <Chart
                     title="Evolution des relevés de température pour l'aéroport de "
                     data={this.state.measures}
                     measure="TEMP"
@@ -124,7 +110,7 @@ class App extends React.Component {
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
                 <Paper className={fixedHeightPaper}>
-                  <Chart 
+                  <Chart
                     title="Evolution des relevés de pression pour l'aéroport de "
                     data={this.state.measures}
                     measure="PRESSURE"
@@ -135,12 +121,12 @@ class App extends React.Component {
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
                 <Paper className={fixedHeightPaper}>
-                  <Chart 
-                    title="Evolution des relevés de vents pour l'aéroport de "
+                  <Chart
+                    title="Evolution des relevés de vent pour l'aéroport de "
                     data={this.state.measures}
                     measure="WIND"
                     airportId={this.state.airportId}
-                    xAxis="Vent (km/h)"
+                    xAxis="Vent (km.h)"
                   />
                 </Paper>
               </Grid>
@@ -150,22 +136,18 @@ class App extends React.Component {
       </div>
     );
   }
-  
-  componentDidMount() {
-    this.loadGraphData()
-  }
 
   loadGraphData() {
-    console.log("run axios get on: /measures")
-    axios.get('/measures', { 
-      headers: { 
-        'Access-Control-Allow-Origin': '*' 
+    // console.log("run axios get on: /measures")
+    axios.get('/measures', {
+      headers: {
+        'Access-Control-Allow-Origin': '*'
       }
     }).then(response => {
-      
+
       // SORT DATA ASCENDING CONSIDERING TIME 
-      let sortedData= response.data.sort((function (b, a) { 
-        return new Date(b.timestamp) - new Date(a.timestamp) 
+      let sortedData = response.data.sort((function (b, a) {
+        return new Date(b.timestamp) - new Date(a.timestamp)
       }));
       this.setState({ measures: sortedData })
     }, error => {

@@ -1,5 +1,3 @@
-/* eslint-disable no-script-url */
-
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -8,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import 'typeface-roboto';
 import Title from './Title';
 import axios from 'axios';
-
 
 const styles = theme => ({
   paper: {
@@ -23,26 +20,14 @@ class Moyennes extends React.Component {
   constructor() {
     super();
     this.state = {
-      averages: {},
-      wind: {
-        isLoaded: false,
-        average: null
-      },
-      temperature: {
-        isLoaded: false,
-        average: null
-      },
-      pressure: {
-        isLoaded: false,
-        average: null
-      },
+      averages : {}
     }
   }
 
   componentDidMount() {
+    // GET CURRENT TIMESTAMP AND GET MEASURES FROM API
     let t = Math.round(new Date() / 1000)
-    t = "1571858366"
-    console.log("run axios get on: /measures/" + t + "/average")
+    // console.log("run axios get on: /measures/" + t + "/average")
     axios.get('/measures/' + t + '/average', {
       headers: {
         'Access-Control-Allow-Origin': '*'
@@ -50,16 +35,7 @@ class Moyennes extends React.Component {
     })
       .then(response => {
         console.log(response.data);
-        this.setState({ averages: response.data.averages })
-        if (response.data.averages.temperature) {
-          this.setState({ temperature: { isLoaded: true, average: response.data.averages.temperature } })
-        }
-        if (response.data.averages.wind) {
-          this.setState({ wind: { isLoaded: true, average: response.data.averages.wind } })
-        }
-        if (response.data.averages.pressure) {
-          this.setState({ pressure: { isLoaded: true, average: response.data.averages.pressure } })
-        }
+        this.setState(response.data)
       }, error => {
         console.log(error);
       });
@@ -67,35 +43,43 @@ class Moyennes extends React.Component {
 
   render() {
     const { classes } = this.props;
+    var averages = this.state.averages
 
-    let displayMeasures = {
-      "temperature": "Temperature : ",
-      "pressure": "Pression : ",
-      "wind": "Vent : ",
-    }
-    this.state.temperature.isLoaded ? displayMeasures.temperature += this.state.temperature.average + " °c" : displayMeasures.temperature += 'Pas de données'
-    this.state.pressure.isLoaded ? displayMeasures.pressure += this.state.pressure.average + " Pa" : displayMeasures.pressure += 'Pas de données'
-    this.state.wind.isLoaded ? displayMeasures.wind += this.state.wind.average + " km/h" : displayMeasures.wind += 'Pas de données'
+    let displayMeasures = [
+      { sensorType : "WIND", displayMsg : "Vent :", unit : "km.h" },
+      { sensorType : "PRESSURE", displayMsg : "Pression :", unit : "Pa" },
+      { sensorType : "TEMP", displayMsg : "Température :", unit : "°c" },
+    ]
+
+    
+    var k
+    displayMeasures.forEach(a => {
+      k = 0
+      Object.keys(averages).forEach(b => {
+        if (a.sensorType === b) {
+          a.displayMsg += " " + Math.round( averages[b] * 10 ) / 10 + " " + a.unit
+          k++
+        }
+      })
+      if (k===0) a.displayMsg += " Pas de données"
+    })
+
+
+    var displayAverages = displayMeasures.map((a,i) => {
+      return (
+        <Grid item xs={4} key={"grid-average-"+i}>
+          <Paper className={classes.paper}>
+            <Typography variant="h6">{a.displayMsg}</Typography>
+          </Paper>
+        </Grid>
+      )
+    })
 
     return (
       <>
         <Title>Moyennes des relevés aujourd'hui</Title>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6">{displayMeasures.temperature}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6">{displayMeasures.wind}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6">{displayMeasures.pressure}</Typography>
-            </Paper>
-          </Grid>
+          {displayAverages}
         </Grid>
       </>
     )
