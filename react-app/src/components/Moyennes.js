@@ -19,7 +19,7 @@ const styles = theme => ({
 });
 
 class Moyennes extends React.Component {
-  
+
   constructor() {
     super();
     this.state = {
@@ -41,27 +41,28 @@ class Moyennes extends React.Component {
 
   componentDidMount() {
     let t = Math.round(new Date() / 1000)
+    t = "1571858366"
     console.log("run axios get on: /measures/" + t + "/average")
-    axios.get('/measures/'+ t +'/average', {
+    axios.get('/measures/' + t + '/average', {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
     })
-    .then(response => {
-      console.log(response.data);
-      this.setState({averages: response.data.averages})
-      if (response.data.averages.temperature) {
-        this.setState({ temperature: { isLoaded: true, average: response.data.averages.temperature }})
-      }
-      if (response.data.averages.wind) {
-        this.setState({ wind: { isLoaded: true, average: response.data.averages.wind }})
-      }
-      if (response.data.averages.pressure) {
-        this.setState({ pressure: { isLoaded: true, average: response.data.averages.pressure }})
-      }
-    }, error => {
-      console.log(error);
-    });
+      .then(response => {
+        console.log(response.data);
+        this.setState({ averages: response.data.averages })
+        if (response.data.averages.temperature) {
+          this.setState({ temperature: { isLoaded: true, average: response.data.averages.temperature } })
+        }
+        if (response.data.averages.wind) {
+          this.setState({ wind: { isLoaded: true, average: response.data.averages.wind } })
+        }
+        if (response.data.averages.pressure) {
+          this.setState({ pressure: { isLoaded: true, average: response.data.averages.pressure } })
+        }
+      }, error => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -79,23 +80,23 @@ class Moyennes extends React.Component {
     return (
       <>
         <Title>Moyennes des relevés aujourd'hui</Title>
-          <Grid container spacing={3}>
-            <Grid item xs={4}>
-              <Paper className={classes.paper}>
-                <Typography variant="h6">{displayMeasures.temperature}</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={4}>
-              <Paper className={classes.paper}>
-                <Typography variant="h6">{displayMeasures.wind}</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={4}>
-              <Paper className={classes.paper}>
-                <Typography variant="h6">{displayMeasures.pressure}</Typography>
-              </Paper>
-            </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={4}>
+            <Paper className={classes.paper}>
+              <Typography variant="h6">{displayMeasures.temperature}</Typography>
+            </Paper>
           </Grid>
+          <Grid item xs={4}>
+            <Paper className={classes.paper}>
+              <Typography variant="h6">{displayMeasures.wind}</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={4}>
+            <Paper className={classes.paper}>
+              <Typography variant="h6">{displayMeasures.pressure}</Typography>
+            </Paper>
+          </Grid>
+        </Grid>
       </>
     )
   }
