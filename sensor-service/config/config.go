@@ -10,6 +10,7 @@ type Config struct {
 	IntervalSendDataSensor int64  `json:"intervalSendDataSensor"`
 	BrokerURL              string `json:"brokerUrl"`
 	BrokerPort             int64  `json:"brokerPort"`
+	AiportID               string `json:"airportId"`
 	SensorID               int64  `json:"sensorId"`
 	SensorType             string `json:"sensorType"`
 	Qos                    byte   `json:"qos"`
