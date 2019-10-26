@@ -1,30 +1,34 @@
 package boot
 
 import (
+	"file-database-service/internal/exportpath"
 	"log"
 	"os"
 )
 
 var (
-	BrokerUrl    = "localhost"
-	BrokerPort   = "1883"
-	CsvDataPath  = "./sensorsData/"
-	MqttClientID = "sub2"
-	MqttTopic    = "sensor/measure"
+	brokerUrl      = "tcp://localhost"
+	brokerPort     = "1883"
+	clientID       = "sub2"
+	topicName      = "sensor/measure"
+	fileExportPath = "./sensorService"
 )
 
 func LoadEnv() {
-	LoadEnvVariable("BROKER_URL", &BrokerUrl)
-	LoadEnvVariable("BROKER_PORT", &BrokerPort)
-	LoadEnvVariable("CSV_EXPORT_PATH", &CsvDataPath)
-	LoadEnvVariable("MQTT_CLIENT_ID", &MqttClientID)
-	LoadEnvVariable("MQTT_TOPIC", &MqttTopic)
+	LoadEnvVariable("BROKER_URL", &brokerUrl)
+	LoadEnvVariable("BROKER_PORT", &brokerPort)
+	LoadEnvVariable("FILE_EXPORT_PATH", &fileExportPath)
+	LoadEnvVariable("MQTT_CLIENT_ID", &clientID)
+	LoadEnvVariable("MQTT_TOPIC", &topicName)
+
+	exportpath.FileExportPath = fileExportPath
 }
 
 func LoadEnvVariable(key string, variable *string) {
 	content, ok := os.LookupEnv(key)
 	if !ok {
 		log.Printf("Can't load variable %s, using default value %s", key, *variable)
+		os.Setenv(key, *variable)
 		return
 	}
 	*variable = content

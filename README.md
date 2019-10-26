@@ -5,27 +5,25 @@
 ### config file 
 
 ```
-[
-  {
+{
+    "intervalSendDataSensor" : int64,
     "brokerUrl" : string,
-    "borkerPort" : int,
-    "sensorId" : int,
+    "brokerPort" : int64,
+    "sensorId" : int64,
     "sensorType" : string,
-    "qos" : int
-  },
-  ...
-]
+    "qos" : byte
+}
 ```
 
 ### PUBLISH on topic sensor/measure
 
 ```
 {
-  "sensorId" : int,
+  "sensorId" : int64,
   "airportId" : string (IATA), 
   "measureType" : string,
-  "measureValue" : float,
-  "timestamp": unix timestamp (seconds)
+  "measureValue" : float64,
+  "timestamp": int64
 }
 ```
 

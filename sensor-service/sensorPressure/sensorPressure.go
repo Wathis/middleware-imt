@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"../common"
-	"../config"
-	"../mqtt"
+	common "common"
+	config "config"
+	mqtt "mqtt"
 )
 
 const topic = "sensor/measure"
@@ -36,7 +36,6 @@ func main() {
 		//Pick random airport
 		rand.Seed(time.Now().UTC().UnixNano())
 		rAirport := rand.Intn(3)
-		fmt.Println(airports[rAirport])
 
 		sensorData, value := common.RandomSensorData(airports[rAirport].name, airports[rAirport].min, airports[rAirport].max, config)
 		airports[rAirport].min, airports[rAirport].max = common.ChangeMinMaxValues(value, variation)
