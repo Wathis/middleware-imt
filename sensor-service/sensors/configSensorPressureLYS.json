@@ -5,7 +5,7 @@
     "brokerPort" : 1883,
     "sensorId" : 3,
     "sensorType" : "PRESSURE",
-    "qos" : 1,
+    "qos" : 2,
     "min" : 0.0,
     "max" : 30.0,
     "variation" : 2.0

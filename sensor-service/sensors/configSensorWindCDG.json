@@ -3,9 +3,9 @@
     "brokerUrl" : "tcp://localhost",
     "airportId" : "CDG",
     "brokerPort" : 1883,
-    "sensorId" : 3,
+    "sensorId" : 2,
     "sensorType" : "WIND",
-    "qos" : 1,
+    "qos" : 2,
     "min" : 0.0,
     "max" : 200.0,
     "variation" : 2.0
