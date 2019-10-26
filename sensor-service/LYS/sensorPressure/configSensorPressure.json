@@ -1,9 +1,0 @@
-{
-    "intervalSendDataSensor" : 10,
-    "brokerUrl" : "tcp://localhost",
-    "airportId" : "LYS",
-    "brokerPort" : 1883,
-    "sensorId" : 3,
-    "sensorType" : "PRESSURE",
-    "qos" : 1
-}

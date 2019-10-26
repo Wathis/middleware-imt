@@ -1,9 +1,0 @@
-{
-    "intervalSendDataSensor" : 10,
-    "brokerUrl" : "tcp://localhost",
-    "airportId" : "NTE",
-    "brokerPort" : 1883,
-    "sensorId" : 2,
-    "sensorType" : "WIND",
-    "qos" : 1
-}
