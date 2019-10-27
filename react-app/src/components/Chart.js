@@ -40,7 +40,7 @@ function formatData(data, filterAirportId, filterMeasure) {
     let res = measures.map(function(elem){
         return createData(new Date(elem.timestamp*1000).toLocaleString(), elem.measureValue)
     })
-    console.log(measures)
+    // console.log(measures)
     return res
 }
 
