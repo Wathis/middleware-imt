@@ -11,7 +11,10 @@
     "brokerPort" : int64,
     "sensorId" : int64,
     "sensorType" : string,
-    "qos" : byte
+    "qos" : byte,
+    "min" : float64,
+    "max" : float64,
+    "variation" : float64
 }
 ```
 
