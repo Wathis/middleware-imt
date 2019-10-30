@@ -3,7 +3,7 @@
     "brokerUrl" : "tcp://localhost",
     "airportId" : "LYS",
     "brokerPort" : 1883,
-    "sensorId" : 2,
+    "sensorId" : 8,
     "sensorType" : "WIND",
     "qos" : 2,
     "min" : 0.0,

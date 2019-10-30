@@ -3,7 +3,7 @@
     "brokerUrl" : "tcp://localhost",
     "airportId" : "NTE",
     "brokerPort" : 1883,
-    "sensorId" : 1,
+    "sensorId" : 6,
     "sensorType" : "TEMP",
     "qos" : 2,
     "min" : -10.0,

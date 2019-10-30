@@ -3,7 +3,7 @@
     "brokerUrl" : "tcp://localhost",
     "airportId" : "CDG",
     "brokerPort" : 1883,
-    "sensorId" : 1,
+    "sensorId" : 4,
     "sensorType" : "TEMP",
     "qos" : 2,
     "min" : -10.0,
